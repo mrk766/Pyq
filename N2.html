@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequential Logic Circuits - Q&A Notes</title>
+<style>
+  :root{
+    --bg:#f7f9fb; --card:#fff; --text:#0f172a; --muted:#475569; --accent:#0ea5a4;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0b1220; --card:#071224; --text:#e6eef6; --muted:#9fb0c8; --accent:#22d3ee }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  .wrap{max-width:980px;margin:20px auto;padding:20px}
+  h1,h2,h3{margin:12px 0}
+  .topic{margin-bottom:24px;padding:20px;background:var(--card);border-radius:12px;box-shadow:0 6px 22px rgba(2,6,23,0.08)}
+  summary{cursor:pointer;font-weight:600;color:var(--accent);padding:8px 0;font-size:16px}
+  details{margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{padding:8px;border-bottom:1px solid rgba(15,23,42,0.06);text-align:left}
+  th{color:var(--muted);font-weight:600}
+  code{background:rgba(14,165,164,0.08);padding:2px 5px;border-radius:4px;font-family:monospace}
+  ul{margin:4px 0 8px 20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Sequential Logic Circuits - Q&A Notes</h1>  <!-- 1. Sequential Circuits -->  <div class="topic">
+    <h2>1. Sequential Circuits</h2><details>
+  <summary>2 Marks: Definition</summary>
+  <p>A sequential circuit is a digital circuit whose output depends on both present inputs and past history (stored in memory elements).</p>
+</details>
+
+<details>
+  <summary>5 Marks: Explanation</summary>
+  <p>Sequential circuits contain memory elements (like flip-flops) and combinational logic. Output changes according to input and stored states. Examples: flip-flops, registers, counters.</p>
+</details>
+
+<details>
+  <summary>10 Marks: Detailed Answer</summary>
+  <p>Sequential circuits are classified into synchronous (clock-controlled) and asynchronous (immediate response) circuits. They are used for data storage, sequence generation, and counters. They are fundamental for designing memory and processor components.</p>
+</details>
+
+  </div>  <!-- 2. Latch -->  <div class="topic">
+    <h2>2. Latch (SR / D)</h2><details>
+  <summary>2 Marks: Definition</summary>
+  <p>A latch is a level-triggered 1-bit memory device. It stores data when enable signal is active.</p>
+</details>
+
+<details>
+  <summary>5 Marks: Working (SR Latch)</summary>
+  <p>SR Latch has inputs S (Set) and R (Reset). Outputs Q and Q̅ store 1 bit.</p>
+  <table>
+    <tr><th>S</th><th>R</th><th>Q(next)</th><th>Description</th></tr>
+    <tr><td>0</td><td>0</td><td>No Change</td><td>Hold</td></tr>
+    <tr><td>0</td><td>1</td><td>0</td><td>Reset</td></tr>
+    <tr><td>1</td><td>0</td><td>1</td><td>Set</td></tr>
+    <tr><td>1</td><td>1</td><td>Invalid</td><td>Forbidden</td></tr>
+  </table>
+</details>
+
+<details>
+  <summary>10 Marks: D Latch Explanation</summary>
+  <p>D Latch has single input D and follows input when Enable = 1. Used in registers, it simplifies circuit design and prevents invalid state.</p>
+</details>
+
+  </div>  <!-- 3. Flip-Flops -->  <div class="topic">
+    <h2>3. Flip-Flops</h2><details>
+  <summary>2 Marks: Definition</summary>
+  <p>Flip-flops are bistable circuits that store 1 bit. Output changes only on clock trigger.</p>
+</details>
+
+<details>
+  <summary>5 Marks: SR / JK / D Flip-Flop</summary>
+  <p>SR Flip-Flop: Set/Reset operation with Q and Q̅ outputs.</p>
+  <p>JK Flip-Flop: Improved SR; toggles when J=K=1.</p>
+  <p>D Flip-Flop: Output follows D input at clock edge.</p>
+</details>
+
+<details>
+  <summary>10 Marks: Master-Slave & T Flip-Flop</summary>
+  <p>Master-Slave JK prevents race by edge triggering. T Flip-Flop toggles output each clock if T=1. Used in counters and memory storage.</p>
+  <table>
+    <tr><th>Type</th><th>Inputs</th><th>Q(next)</th><th>Use</th></tr>
+    <tr><td>SR</td><td>S,R</td><td>Hold/Set/Reset/Invalid</td><td>Basic latch</td></tr>
+    <tr><td>JK</td><td>J,K</td><td>Hold/Set/Reset/Toggle</td><td>Improved SR</td></tr>
+    <tr><td>D</td><td>D</td><td>Q=D</td><td>Data storage</td></tr>
+    <tr><td>T</td><td>T</td><td>Toggle</td><td>Counters</td></tr>
+  </table>
+</details>
+
+  </div>  <!-- 4. Shift Registers -->  <div class="topic">
+    <h2>4. Shift Registers</h2><details>
+  <summary>2 Marks: Definition</summary>
+  <p>A shift register is a series of flip-flops used to store and shift data on clock pulses.</p>
+</details>
+
+<details>
+  <summary>5 Marks: Types</summary>
+  <table>
+    <tr><th>Type</th><th>Full Form</th><th>Function</th></tr>
+    <tr><td>SISO</td><td>Serial In Serial Out</td><td>Shift bits serially in and out</td></tr>
+    <tr><td>SIPO</td><td>Serial In Parallel Out</td><td>Serial input, parallel output</td></tr>
+    <tr><td>PISO</td><td>Parallel In Serial Out</td><td>Parallel input, serial output</td></tr>
+    <tr><td>PIPO</td><td>Parallel In Parallel Out</td><td>Parallel input and output</td></tr>
+  </table>
+</details>
+
+<details>
+  <summary>10 Marks: Applications</summary>
+  <ul>
+    <li>Data conversion: serial ↔ parallel</li>
+    <li>Temporary storage</li>
+    <li>Time delay circuits</li>
+    <li>Sequence generation</li>
+  </ul>
+</details>
+
+  </div>  <!-- 5. Counters (Ring & Johnson) -->  <div class="topic">
+    <h2>5. Counters</h2><details>
+  <summary>2 Marks: Ring & Johnson Definition</summary>
+  <p>Ring Counter: circulates a single 1 through N flip-flops (N states).<br>Johnson Counter: inverted output of last FF fed to first (2N states).</p>
+</details>
+
+<details>
+  <summary>5 Marks: Ring Counter Example</summary>
+  <p>4-bit Ring Counter states: 1000 → 0100 → 0010 → 0001 → repeat.</p>
+</details>
+
+<details>
+  <summary>10 Marks: Johnson Counter Example</summary>
+  <p>4-bit Johnson Counter states: 0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000 → repeat.</p>
+  <table>
+    <tr><th>Feature</th><th>Ring</th><th>Johnson</th></tr>
+    <tr><td>No. of FFs</td><td>N</td><td>N</td></tr>
+    <tr><td>No. of states</td><td>N</td><td>2N</td></tr>
+    <tr><td>Feedback</td><td>Direct last → first</td><td>Inverted last → first</td></tr>
+    <tr><td>Use</td><td>Sequence generation</td><td>Efficient counters</td></tr>
+  </table>
+</details>
+
+  </div>  <!-- 6. Instruction Format -->  <div class="topic">
+    <h2>6. Instruction Format</h2><details>
+  <summary>2 Marks: Definition</summary>
+  <p>Instruction format defines how an instruction is divided into opcode and operands.</p>
+</details>
+
+<details>
+  <summary>5 Marks: Fields</summary>
+  <ul>
+    <li>Opcode: Operation code (ADD, SUB, LOAD)</li>
+    <li>Address: Memory/register location of operands</li>
+    <li>Mode: Addressing mode (immediate, direct, indirect)</li>
+    <li>Register: Register involved</li>
+  </ul>
+</details>
+
+<details>
+  <summary>10 Marks: Example</summary>
+  <p><code>ADD R1, X</code> → Opcode: ADD, Operand1: R1, Operand2: Memory X. Instruction controls CPU operation and data access.</p>
+</details>
+
+  </div></div>
+</body>
+</html>
