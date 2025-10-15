@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java & OOPS Interactive Study Guide</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --text-color: #212529;
+            --secondary-text-color: #495057;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+            --code-bg: #212529;
+            --code-text: #f8f9fa;
+            --code-border: #495057;
+            --header-color: var(--primary-hover);
+            --tab-hover-bg: #e9ecef;
+        }
+
+        body.dark-mode {
+            --primary-color: #0d6efd;
+            --primary-hover: #3390ff;
+            --text-color: #e9ecef;
+            --secondary-text-color: #adb5bd;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #495057;
+            --code-bg: #2c3034;
+            --code-text: #e9ecef;
+            --code-border: #5c636a;
+            --header-color: #6ea8fe;
+            --tab-hover-bg: #343a40;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--header-color);
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        h2, h3 {
+            color: var(--header-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 35px;
+        }
+
+        .tab-nav {
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 25px;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .tab-nav::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        .tab-btn {
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 14px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            color: var(--secondary-text-color);
+        }
+
+        .tab-btn:hover {
+            background-color: var(--tab-hover-bg);
+        }
+
+        .tab-btn.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-hover);
+            font-weight: bold;
+        }
+
+        .unit-content {
+            display: none;
+        }
+
+        .qa-block {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+
+        .answer {
+            display: none;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+            margin-top: 15px;
+            color: var(--secondary-text-color);
+        }
+
+        .toggle-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        code {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: "SF Mono", "Courier New", Courier, monospace;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-size: 0.9em;
+            border: 1px solid var(--code-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--tab-hover-bg);
+        }
+
+        /* Theme Switcher Styles */
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+        }
+        .theme-switcher label {
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .theme-switcher input {
+            display: none;
+        }
+        .icon-sun, .icon-moon {
+             transition: transform 0.3s ease;
+        }
+        .theme-switcher input:checked + label .icon-sun {
+            display: none;
+        }
+        .theme-switcher input:not(:checked) + label .icon-moon {
+            display: none;
+        }
+
+        /* Mobile Friendliness */
+        @media (max-width: 600px) {
+            body {
+                padding: 5px;
+            }
+            .header {
+                padding: 0 5px;
+            }
+            h1 {
+                font-size: 1.4em;
+                text-align: left;
+            }
+            .qa-block {
+                padding: 15px;
+            }
+            .tab-btn {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Java & OOPS Study Guide</h1>
+            <div class="theme-switcher">
+                <input type="checkbox" id="theme-toggle">
+                <label for="theme-toggle">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showUnit('unit1', this)">Unit I: OOPS</button>
+            <button class="tab-btn" onclick="showUnit('unit2', this)">Unit II: Java Intro</button>
+            <button class="tab-btn" onclick="showUnit('unit3', this)">Unit III: Threads</button>
+            <button class="tab-btn" onclick="showUnit('unit4', this)">Unit IV: JDBC</button>
+            <button class="tab-btn" onclick="showUnit('unit5', this)">Unit V: GUI</button>
+        </div>
+
+        <!-- UNIT I – OOPS Concepts -->
+        <div id="unit1" class="unit-content" style="display: block;">
+            <h2>UNIT I – OOPS Concepts</h2>
+            <h3>2 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Define Object-Oriented Programming (OOP).</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects". These objects can contain data in the form of fields (attributes or properties) and code in the form of procedures (methods). The primary goal is to model real-world entities to create more flexible and maintainable software.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. What is encapsulation?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Encapsulation is the bundling of data (attributes) and the methods that operate on that data into a single unit, known as a class. It restricts direct access to some of an object's components, which is a key principle for protecting data from accidental modification (data hiding).</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Define class and object.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A <strong>class</strong> is a blueprint or template for creating objects. It defines the properties (attributes) and behaviors (methods) that its objects will have. An <strong>object</strong> is a real-world instance of a class, with its own state and behavior.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. What is polymorphism?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Polymorphism (from Greek, meaning "many shapes") is the ability of a method or object to take on different forms. In Java, it is achieved through <strong>method overloading</strong> (compile-time polymorphism) and <strong>method overriding</strong> (runtime polymorphism), allowing a single action to be performed in different ways.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. List any two features of object orientation.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Two major features are:</p>
+                    <ul>
+                        <li><strong>Inheritance:</strong> A mechanism where a new class (subclass) inherits attributes and methods from an existing class (superclass).</li>
+                        <li><strong>Abstraction:</strong> The concept of hiding complex implementation details and showing only the essential features of the object to the user.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>5 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Compare procedural and object-oriented programming.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <table>
+                        <thead><tr><th>Feature</th><th>Procedural Programming (POP)</th><th>Object-Oriented Programming (OOP)</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Approach</strong></td><td>Top-down approach.</td><td>Bottom-up approach.</td></tr>
+                            <tr><td><strong>Focus</strong></td><td>Focuses on functions or procedures.</td><td>Focuses on data through objects.</td></tr>
+                            <tr><td><strong>Data Security</strong></td><td>Data is generally exposed and can be accessed globally. Less secure.</td><td>Data is hidden and protected (encapsulated). More secure.</td></tr>
+                            <tr><td><strong>Reusability</strong></td><td>Less code reusability.</td><td>High code reusability through inheritance.</td></tr>
+                            <tr><td><strong>Example</strong></td><td>C, FORTRAN, Pascal</td><td>Java, C++, Python</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Explain the principles of object orientation with examples.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                     <p>The four main principles of object orientation are:</p>
+                    <ol>
+                        <li><strong>Encapsulation:</strong> Binding data and methods into a single unit (class) and hiding the data from the outside world. Example: A `BankAccount` class encapsulates the `balance` variable, making it private. The only way to change the balance is through public methods like `deposit()` and `withdraw()`.</li>
+                        <li><strong>Abstraction:</strong> Hiding internal implementation details and showing only essential features. Example: When you use a TV remote, you press a button to change the channel without needing to know the complex electronics behind it.</li>
+                        <li><strong>Inheritance:</strong> Allowing a class (child class) to inherit properties and methods from another class (parent class). Example: A `Dog` class and a `Cat` class can both inherit from an `Animal` class.</li>
+                        <li><strong>Polymorphism:</strong> The ability to take more than one form. Example: An `Animal` class has a method `makeSound()`. The `Dog` object's `makeSound()` will print "Woof", while the `Cat` object's `makeSound()` will print "Meow".</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Write short notes on inheritance and abstraction.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Inheritance:</strong> It is one of the core concepts of OOP that allows a class (child or subclass) to inherit the properties and behaviors (fields and methods) of another class (parent or superclass). This promotes code reusability and establishes an "is-a" relationship. The `extends` keyword is used to achieve inheritance in Java.</p>
+                    <p><strong>Abstraction:</strong> It is the concept of hiding the internal details and showing only the functionality. In Java, abstraction is achieved using abstract classes and interfaces. It focuses on what an object does instead of how it does it. For example, a `Shape` interface can declare a method `calculateArea()`, but the actual calculation is implemented differently by classes like `Circle` and `Square`.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. Describe the features of an object – attributes, state, and behavior.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>An object in OOP is a self-contained entity that consists of three key features:</p>
+                    <ul>
+                        <li><strong>Attributes (or Properties):</strong> These are the data members of a class that represent the characteristics of an object. For a `Dog` object, attributes might include `color`, `breed`, and `age`.</li>
+                        <li><strong>State:</strong> The state of an object is represented by the current values of its attributes. For a specific `Dog` object, the state could be: `color` is "Brown", `breed` is "Labrador", `age` is 5.</li>
+                        <li><strong>Behavior:</strong> This defines what an object can do. It is represented by the methods of a class. For a `Dog` object, behaviors could be methods like `bark()`, `eat()`, and `sleep()`.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. Explain modularity and message passing in OOP.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Modularity:</strong> Modularity is the property of a system that has been decomposed into a set of cohesive and loosely coupled modules. In OOP, classes and objects serve as these modules. A well-designed system is modular, meaning you can change the internal implementation of one object without affecting the other objects that interact with it.</p>
+                    <p><strong>Message Passing:</strong> Objects in an OOP system communicate with each other by sending and receiving messages. A message is essentially a request for an object to execute one of its methods. The receiving object then performs the action defined in that method. For example, a `Driver` object sends a "stop" message to a `Car` object by calling the `car.stop()` method.</p>
+                </div>
+            </div>
+
+            <h3>10 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain in detail the basic concepts and features of Object-Oriented Programming.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Object-Oriented Programming is a methodology to design a program using classes and objects. The main concepts are:</p>
+                    <ul>
+                        <li><strong>Class:</strong> A template or blueprint from which objects are created.</li>
+                        <li><strong>Object:</strong> An instance of a class, representing a real-world entity.</li>
+                        <li><strong>Encapsulation:</strong> The wrapping of data and methods into a single unit (a class). It implements data hiding, preventing direct access to data.</li>
+                        <li><strong>Inheritance:</strong> The mechanism by which one class acquires the properties and behaviors of a parent class, supporting code reusability.</li>
+                        <li><strong>Polymorphism:</strong> The ability of an object to take on many forms, allowing a single action to be performed in different ways (method overriding and overloading).</li>
+                        <li><strong>Abstraction:</strong> The process of hiding the implementation details from the user and only showing the functionality.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Discuss various principles of object orientation with suitable examples in Java.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>1. Encapsulation:</strong> Achieved by declaring class variables as private and providing public getter/setter methods.</p>
+                    <code>public class Student {
+    private String name; // Data hiding
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}</code>
+                    <p><strong>2. Inheritance:</strong> Using the `extends` keyword.</p>
+                    <code>class Animal { 
+    void eat() { System.out.println("eating..."); } 
+}
+
+class Dog extends Animal { 
+    void bark() { System.out.println("barking..."); } 
+}</code>
+                    <p><strong>3. Polymorphism:</strong> Achieved via method overriding.</p>
+                    <code>class Animal { 
+    void makeSound() { System.out.println("Animal sound"); } 
+}
+
+class Cat extends Animal { 
+    @Override 
+    void makeSound() { System.out.println("Meow"); } 
+}</code>
+                    <p><strong>4. Abstraction:</strong> Using `abstract` classes or `interfaces`.</p>
+                    <code>abstract class Shape { 
+    abstract void draw(); 
+}
+
+class Circle extends Shape { 
+    void draw() { System.out.println("drawing circle"); } 
+}</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Compare procedural programming and OOP with examples.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                     <p>The core difference is in how data and operations are organized.</p>
+                    <p><strong>Procedural Programming (POP):</strong> Focuses on a sequence of instructions. Data and functions are separate entities.</p>
+                    <p><em>Example in C (Procedural):</em></p>
+                    <code>struct Rectangle { 
+    int length; 
+    int width; 
+};
+
+int getArea(struct Rectangle r) { 
+    return r.length * r.width; 
+}</code>
+                    <p><strong>Object-Oriented Programming (OOP):</strong> Focuses on objects, where data and the functions that operate on that data are bundled together.</p>
+                    <p><em>Example in Java (OOP):</em></p>
+                    <code>class Rectangle {
+    int length; 
+    int width;
+    
+    int getArea() { 
+        return length * width; 
+    }
+}</code>
+                    <p>In the OOP example, the data and the operation are tightly coupled within the `Rectangle` class, which is more organized and secure.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT II – Introduction to Java -->
+        <div id="unit2" class="unit-content">
+            <h2>UNIT II – Introduction to Java</h2>
+            <h3>2 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. What is JVM?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>JVM (Java Virtual Machine)</strong> is an abstract machine that provides a runtime environment in which Java bytecode can be executed. It is a crucial component that enables Java's platform independence ("write once, run anywhere").</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Define a bytecode.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Bytecode</strong> is the intermediate, platform-independent code generated by the Java compiler from the source code (`.java` file). It consists of a set of instructions for the JVM, which then interprets or compiles it into machine-specific code for execution.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. What are primitive data types in Java?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Primitive data types are the most basic data types predefined by the Java language. They are not objects and store the actual values. There are eight: `byte`, `short`, `int`, `long`, `float`, `double`, `boolean`, and `char`.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. What is a constructor?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A constructor in Java is a special method used to initialize objects. It is called when an object of a class is created. It must have the same name as the class and does not have a return type.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. Define method overloading.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Method overloading is a feature that allows a class to have more than one method with the same name, as long as their parameter lists are different (i.e., different number, type, or order of parameters). It is a way to achieve compile-time polymorphism.</p>
+                </div>
+            </div>
+    
+            <h3>5 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain the structure of a simple Java program.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A simple Java program has the following structure:</p>
+                    <ol>
+                        <li><strong>Documentation Section:</strong> (Optional) Comments.</li>
+                        <li><strong>Package Statement:</strong> (Optional) Ex: `package com.example;`</li>
+                        <li><strong>Import Statements:</strong> (Optional) Ex: `import java.util.Scanner;`</li>
+                        <li><strong>Class Definition:</strong> Every Java program must have at least one class.</li>
+                        <li><strong>Main Method:</strong> The entry point of the program: `public static void main(String[] args)`.</li>
+                    </ol>
+                    <code>class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Write short notes on type casting and conversions in Java.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Type casting is when you assign a value of one primitive data type to another type.</p>
+                    <p><strong>1. Widening Conversion (Implicit):</strong> Happens automatically when converting a smaller data type to a larger type size. It is safe because there is no loss of information.</p>
+                    <code>int myInt = 9;
+double myDouble = myInt; // Automatic casting: int to double</code>
+                    <p><strong>2. Narrowing Conversion (Explicit):</strong> Must be done manually when converting a larger data type to a smaller size type. There is a risk of losing information.</p>
+                    <code>double myDouble = 9.78;
+int myInt = (int) myDouble; // Explicit casting: double to int. Result is 9.</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Discuss static members and the this reference.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Static Members:</strong></p>
+                    <ul>
+                        <li>The `static` keyword is used for a variable or method that belongs to the class itself, rather than to any specific instance (object).</li>
+                        <li>A static variable is shared among all instances of the class.</li>
+                        <li>A static method can be called without creating an object of the class (`ClassName.staticMethod()`).</li>
+                    </ul>
+                    <p><strong>The `this` Reference:</strong></p>
+                    <ul>
+                        <li>`this` is a reference variable that refers to the current object.</li>
+                        <li>It is used to resolve ambiguity between instance variables and parameters (`this.variable = variable`).</li>
+                        <li>It can be used to invoke the current class's constructor (`this()`).</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. Explain dynamic method dispatch.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Dynamic Method Dispatch is the mechanism by which a call to an overridden method is resolved at runtime, rather than compile-time. It is how Java implements runtime polymorphism.</p>
+                    <p>When an overridden method is called through a superclass reference, Java determines which version of that method to execute based on the type of the object being referred to at the time the call occurs.</p>
+                    <code>class Animal { void move() { System.out.println("Animals can move"); } }
+class Dog extends Animal { void move() { System.out.println("Dogs can walk"); } }
+// In main:
+Animal a = new Dog(); // Superclass reference refers to subclass object
+a.move(); // Calls the method in the Dog class at runtime.
+</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. Describe different types of inheritance in Java.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Java supports the following types of inheritance:</p>
+                    <ul>
+                        <li><strong>Single Inheritance:</strong> A class inherits from only one superclass. (B extends A).</li>
+                        <li><strong>Multilevel Inheritance:</strong> A class inherits from another class, which in turn inherits from another class. (C extends B, and B extends A).</li>
+                        <li><strong>Hierarchical Inheritance:</strong> Multiple classes inherit from a single superclass. (B extends A, and C also extends A).</li>
+                    </ul>
+                    <p><strong>Note:</strong> Java does not support <strong>Multiple Inheritance</strong> with classes to avoid ambiguity. However, it can be achieved through interfaces.</p>
+                </div>
+            </div>
+    
+            <h3>10 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain the main features of Java and its execution process.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Main Features of Java:</strong></p>
+                    <ul>
+                        <li><strong>Platform Independent:</strong> Java's "Write Once, Run Anywhere" (WORA) is possible because code is compiled to bytecode that runs on any JVM.</li>
+                        <li><strong>Object-Oriented:</strong> Everything in Java is an object, promoting clean design and reusability.</li>
+                        <li><strong>Robust:</strong> Java has strong memory management, exception handling, and automatic garbage collection.</li>
+                        <li><strong>Secure:</strong> Provides a secure environment with a Security Manager and bytecode verifier.</li>
+                        <li><strong>Multithreaded:</strong> Built-in support for multithreading allows for concurrent execution.</li>
+                    </ul>
+                    <p><strong>Execution Process:</strong></p>
+                    
+                    <ol>
+                        <li><strong>Write Code:</strong> Source code is written in a `.java` file.</li>
+                        <li><strong>Compile:</strong> The `javac` compiler translates it into bytecode (`.class` file).</li>
+                        <li><strong>Load & Verify:</strong> The JVM's Classloader loads the bytecode, and the Bytecode Verifier checks it for security.</li>
+                        <li><strong>Execute:</strong> The JVM's Interpreter or Just-In-Time (JIT) compiler converts the bytecode into native machine code for execution.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Discuss constructors and passing objects to methods with examples.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Constructors:</strong></p>
+                    <p>A constructor is a block of code similar to a method that's called when an instance of an object is created to initialize its state.</p>
+                    <code>class Box {
+    double width, height;
+    // Parameterized Constructor
+    Box(double w, double h) { width = w; height = h; }
+}</code>
+                    <p><strong>Passing Objects to Methods:</strong></p>
+                    <p>In Java, objects are passed to methods by reference. This means the method receives a reference to the original object, and any changes made to the object's state within the method will affect the original object.</p>
+                    <code>class Test {
+    int a;
+    // Method that takes an object as a parameter
+    void update(Test obj) {
+        obj.a = obj.a * 2;
+    }
+}
+// Usage in main:
+Test t = new Test();
+t.a = 10;
+t.update(t); // Pass the object
+System.out.println(t.a); // Prints 20
+</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Describe inheritance and method overriding in detail.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Inheritance:</strong></p>
+                    <p>Inheritance is a fundamental principle of OOP where a new class (subclass) inherits fields and methods from an existing class (superclass). It is achieved using the `extends` keyword. The main advantages are code reusability and establishing a clear hierarchy.</p>
+                    <p><strong>Method Overriding:</strong></p>
+                    <p>Method overriding occurs when a subclass provides a specific implementation for a method that is already defined in its superclass. It is a way to achieve runtime polymorphism.</p>
+                    <p>Rules for method overriding:</p>
+                    <ul>
+                        <li>The method must have the same name, same parameter list, and same return type as in the parent class.</li>
+                        <li>The access level cannot be more restrictive (e.g., cannot override a `public` method with a `private` one).</li>
+                        <li>The `@Override` annotation is recommended for clarity.</li>
+                    </ul>
+                    <code>class Vehicle { void run() { System.out.println("Vehicle is running"); } }
+class Bike extends Vehicle {
+    @Override // Overriding the run method
+    void run() { System.out.println("Bike is running safely"); }
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT III – Exceptions and Threads -->
+        <div id="unit3" class="unit-content">
+            <h2>UNIT III – Exceptions and Threads</h2>
+            <h3>2 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. What is an exception in Java?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>An <strong>exception</strong> is an unwanted or unexpected event that occurs during the execution of a program, disrupting the normal flow of instructions. In Java, an exception is an object that is "thrown" at runtime and can be "caught" and handled.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. What is the use of the finally block?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The <strong>finally</strong> block is used to execute important code, such as closing files or database connections, regardless of whether an exception occurs in the `try` block or not. It is always executed after the `try-catch` block completes.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Define a thread.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A <strong>thread</strong> is the smallest unit of execution within a process. A Java application can have multiple threads running concurrently, allowing it to perform multiple tasks simultaneously (multithreading).</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. What is a daemon thread?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A <strong>daemon thread</strong> is a low-priority thread that runs in the background to provide services to user threads (e.g., the garbage collector). The JVM exits as soon as all user threads have completed, without waiting for daemon threads.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. List any two thread states.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Two common thread states are:</p>
+                    <ul>
+                        <li><strong>NEW:</strong> The state of a thread when it has been created but not yet started.</li>
+                        <li><strong>RUNNABLE:</strong> The state of a thread that is ready to run and waiting for CPU time.</li>
+                    </ul>
+                </div>
+            </div>
+    
+            <h3>5 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain the difference between throw and throws keywords.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                     <table>
+                        <thead><tr><th>Feature</th><th>throw</th><th>throws</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Purpose</strong></td><td>Used to explicitly throw a single exception within a method.</td><td>Used in a method signature to declare the exceptions that might be thrown by that method.</td></tr>
+                            <tr><td><strong>Usage</strong></td><td>Followed by an instance of an Exception. Ex: `throw new IOException();`</td><td>Followed by Exception class names. Ex: `void myMethod() throws IOException`</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Write a note on creating threads using the Runnable interface.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Creating a thread by implementing the `Runnable` interface is the preferred method because it allows the class to extend another class (as Java does not support multiple class inheritance).</p>
+                    <p>Steps:</p>
+                    <ol>
+                        <li>Create a class that implements the `Runnable` interface.</li>
+                        <li>Provide an implementation for the `run()` method.</li>
+                        <li>Create an instance of this class.</li>
+                        <li>Create an instance of the `Thread` class, passing the `Runnable` object to its constructor.</li>
+                        <li>Call the `start()` method on the `Thread` object.</li>
+                    </ol>
+                    <code>class MyRunnable implements Runnable {
+    public void run() { /* thread logic */ }
+}
+// In main:
+Thread t1 = new Thread(new MyRunnable());
+t1.start();</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Discuss thread synchronization.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Thread synchronization</strong> is a mechanism that controls the access of multiple threads to any shared resource. It is necessary to prevent race conditions and data inconsistencies.</p>
+                    <p>In Java, it can be achieved using:</p>
+                    <ol>
+                        <li><strong>Synchronized Method:</strong> By declaring a method `synchronized`, only one thread can execute it at a time for a given object instance.</li>
+                        <li><strong>Synchronized Block:</strong> By using a `synchronized(this)` block, you can lock a specific part of the code instead of the entire method, which can improve performance.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. Explain thread life cycle.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The life cycle of a thread involves transitioning between several states:</p>
+                    
+                    <ol>
+                        <li><strong>New:</strong> The thread is created but not yet started.</li>
+                        <li><strong>Runnable:</strong> The thread is ready to execute after `start()` is called.</li>
+                        <li><strong>Blocked/Waiting:</strong> The thread is temporarily inactive, waiting for a lock or an I/O operation.</li>
+                        <li><strong>Timed Waiting:</strong> The thread is waiting for a specific amount of time (e.g., `Thread.sleep()`).</li>
+                        <li><strong>Terminated (Dead):</strong> The thread has completed its execution.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. Explain user-defined exceptions with an example.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>User-defined or custom exceptions are created by programmers to handle specific error conditions. You create one by extending the `Exception` class.</p>
+                    <code>// 1. Create the custom exception class
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) { super(message); }
+}
+
+// 2. Use it in application code
+public class TestCustomException {
+    static void validate(int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Not valid age");
+        }
+    }
+}</code>
+                </div>
+            </div>
+    
+            <h3>10 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain exception handling in Java with syntax and examples.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Exception handling is a mechanism to handle runtime errors to maintain the normal flow of the application. It is managed using `try`, `catch`, `finally`, `throw`, and `throws`.</p>
+                    <p><strong>Syntax:</strong></p>
+                    <code>try {
+    // Code that may throw an exception
+} catch (ExceptionType1 e1) {
+    // Code to handle exception
+} finally {
+    // Code that will always be executed
+}</code>
+                    <p><strong>Example:</strong></p>
+                    <code>public class ExceptionHandlingExample {
+    public static void main(String args[]) {
+        try {
+            int data = 100 / 0; // Throws ArithmeticException
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero.");
+        } finally {
+            System.out.println("Finally block is executed.");
+        }
+    }
+}</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Discuss thread creation methods and synchronization in detail.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Thread Creation Methods:</strong></p>
+                    <p><strong>1. Extending the `Thread` Class:</strong> Create a new class that extends `Thread` and override its `run()` method. Limitation: This class cannot extend any other class.</p>
+                    <p><strong>2. Implementing the `Runnable` Interface:</strong> Create a class that implements `Runnable` and implement the `run()` method. This is preferred as it allows the class to extend another class.</p>
+                    <p><strong>Synchronization:</strong></p>
+                    <p>Synchronization is crucial for controlling access to shared resources. It is achieved using the `synchronized` keyword.</p>
+                    <ul>
+                        <li><strong>Synchronized Method:</strong> When a method is declared `synchronized`, the thread acquires a lock on the object before executing the method.</li>
+                        <li><strong>Synchronized Block:</strong> Provides more granular control by locking only a part of the method's code, reducing the scope of the lock.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Explain the concept of multithreading in Java with suitable examples.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                     <p><strong>Multithreading</strong> is a Java feature that allows concurrent execution of two or more parts of a program for maximum utilization of the CPU. Each part of such a program is called a thread.</p>
+                    <p><strong>Advantages:</strong> Improved Performance, Responsiveness, and efficient Resource Sharing.</p>
+                    <p><strong>Example:</strong></p>
+                    <code>class MultiTask implements Runnable {
+    public void run() { /* task logic */ }
+}
+
+public class MultiThreadExample {
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new MultiTask());
+        Thread thread2 = new Thread(new MultiTask());
+        thread1.start();
+        thread2.start();
+    }
+}</code>
+                    <p>In this example, the two tasks will execute concurrently, with their outputs interleaved in the console.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UNIT IV – JDBC and Applets -->
+        <div id="unit4" class="unit-content">
+            <h2>UNIT IV – JDBC and Applets</h2>
+            <h3>2 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. What is JDBC?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>JDBC (Java Database Connectivity)</strong> is a standard Java API for connecting and executing queries with a database. It provides classes and interfaces to communicate with various relational databases.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. What is a ResultSet in JDBC?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A <strong>ResultSet</strong> is a Java object that represents a table of data generated by executing a database query (like a `SELECT` statement). It maintains a cursor pointing to its current row of data.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Define an applet.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>An <strong>applet</strong> is a special type of small Java program that is designed to be embedded within another application, typically a web page, and executed in a client's web browser. Applets are now considered deprecated technology.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. What is an SQL query?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>An <strong>SQL (Structured Query Language) query</strong> is a command used to interact with a relational database. It can be used to perform tasks such as retrieving data (`SELECT`), updating data (`UPDATE`), and deleting data (`DELETE`).</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. What is executeQuery() used for?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The <strong>`executeQuery()`</strong> method in JDBC is used specifically for executing SQL statements that retrieve data, primarily `SELECT` queries. It returns the results in a `ResultSet` object.</p>
+                </div>
+            </div>
+    
+            <h3>5 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain steps to connect a Java program with a database using JDBC.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>There are 5 main steps to connect to a database using JDBC:</p>
+                    <ol>
+                        <li><strong>Load and Register the Driver:</strong> Load the database driver class into memory using `Class.forName("com.mysql.cj.jdbc.Driver");`.</li>
+                        <li><strong>Establish a Connection:</strong> Use the `DriverManager.getConnection()` method to create a `Connection` object. This requires the database URL, username, and password.</li>
+                        <li><strong>Create a Statement:</strong> Use the `connection.createStatement()` method to create a `Statement` or `PreparedStatement` object for sending SQL queries to the database.</li>
+                        <li><strong>Execute the Query:</strong> Use a method like `executeQuery()` (for SELECT) or `executeUpdate()` (for INSERT, UPDATE, DELETE) on the statement object.</li>
+                        <li><strong>Close the Connection:</strong> Close the `ResultSet`, `Statement`, and `Connection` objects in a `finally` block to release database resources.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Write short notes on JDBC driver types.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>There are four types of JDBC drivers:</p>
+                    <ul>
+                        <li><strong>Type 1 (JDBC-ODBC Bridge Driver):</strong> Translates JDBC calls into ODBC calls. Now deprecated.</li>
+                        <li><strong>Type 2 (Native-API Driver):</strong> Uses a vendor-specific native library on the client side. Not fully written in Java.</li>
+                        <li><strong>Type 3 (Network-Protocol Driver):</strong> Uses middleware to communicate with the database. Platform-independent.</li>
+                        <li><strong>Type 4 (Thin Driver):</strong> A pure Java driver that communicates directly with the database's network protocol. This is the most common type used today.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Describe applet life cycle.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The applet life cycle is managed by the web browser and consists of five main methods:</p>
+                    <ol>
+                        <li><strong>`init()`:</strong> Called once when the applet is first loaded. Used for one-time initialization.</li>
+                        <li><strong>`start()`:</strong> Called after `init()` and every time the user returns to the page containing the applet. Used to start animations or threads.</li>
+                        <li><strong>`stop()`:</strong> Called when the user leaves the page containing the applet. Used to stop animations or threads.</li>
+                        <li><strong>`destroy()`:</strong> Called once when the applet is unloaded from memory (e.g., when the browser is closed). Used for final cleanup.</li>
+                        <li><strong>`paint()`:</strong> Called whenever the applet's display needs to be redrawn.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. Write a simple Java applet to display 'Hello World'.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Note: Applets are deprecated and may not run in modern browsers.</p>
+                    <code>import java.applet.Applet;
+import java.awt.Graphics;
+
+public class HelloWorldApplet extends Applet {
+    // The paint method is called to draw on the applet
+    public void paint(Graphics g) {
+        // Draw the string "Hello World" at position (50, 25)
+        g.drawString("Hello World", 50, 25);
+    }
+}
+// To run this, you would need an HTML file:
+// <applet code="HelloWorldApplet.class" width="200" height="60"></applet></code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. Explain the purpose of Statement and PreparedStatement.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                     <table>
+                        <thead><tr><th>Feature</th><th>Statement</th><th>PreparedStatement</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Usage</strong></td><td>Used for executing simple, static SQL queries without parameters.</td><td>Used for executing precompiled SQL queries with or without parameters.</td></tr>
+                            <tr><td><strong>Performance</strong></td><td>Slower. The query is compiled every time it is executed.</td><td>Faster. The query is precompiled, so subsequent executions are quicker.</td></tr>
+                            <tr><td><strong>Security</strong></td><td>Vulnerable to SQL Injection attacks.</td><td>Prevents SQL Injection because it automatically escapes special characters.</td></tr>
+                            <tr><td><strong>Parameters</strong></td><td>Does not support parameters.</td><td>Supports input parameters using placeholders (`?`).</td></tr>
+                        </tbody>
+                    </table>
+                     <p>In general, `PreparedStatement` is preferred over `Statement` for better performance and security.</p>
+                </div>
+            </div>
+    
+            <h3>10 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain the JDBC connectivity model with suitable example programs.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The JDBC connectivity model involves several key components:</p>
+                    
+                    <ul>
+                        <li><strong>Java Application:</strong> Your program that needs database access.</li>
+                        <li><strong>JDBC API:</strong> The set of interfaces and classes provided by Java (`java.sql.*`).</li>
+                        <li><strong>JDBC Driver Manager:</strong> A class that manages a list of database drivers. It matches a connection request from the Java application with the appropriate driver.</li>
+                        <li><strong>JDBC Driver:</strong> A vendor-specific implementation that translates JDBC calls into the database's native protocol.</li>
+                        <li><strong>Database:</strong> The relational database you are connecting to.</li>
+                    </ul>
+                    <p><strong>Example Program:</strong></p>
+                    <code>import java.sql.*;
+
+public class JdbcExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydatabase";
+        String user = "root";
+        String password = "password";
+        
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM students")) {
+            
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Discuss different types of applets and their life cycle.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>There are mainly two types of applets:</p>
+                    <ol>
+                        <li><strong>Local Applet:</strong> An applet that is stored on the local file system. It is accessed through a local HTML file.</li>
+                        <li><strong>Remote Applet:</strong> An applet that is stored on a remote web server. It is downloaded by the web browser when a user accesses the corresponding web page.</li>
+                    </ol>
+                    <p><strong>Applet Life Cycle:</strong></p>
+                    <p>The life cycle is managed by the browser and controlled by five key methods:</p>
+                    <ul>
+                        <li><strong>`init()`:</strong> Called once when the applet is first loaded.</li>
+                        <li><strong>`start()`:</strong> Called after `init()` and whenever the browser revisits the page.</li>
+                        <li><strong>`paint(Graphics g)`:</strong> Called whenever the applet needs to be redrawn.</li>
+                        <li><strong>`stop()`:</strong> Called when the browser moves away from the applet's page.</li>
+                        <li><strong>`destroy()`:</strong> Called once when the browser closes or the applet is permanently removed from memory.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Explain how to execute and update SQL queries using JDBC.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>JDBC uses methods of the `Statement` and `PreparedStatement` interfaces to execute SQL queries.</p>
+                    <p><strong>1. Executing `SELECT` Queries (Retrieving Data):</strong></p>
+                    <p>The `executeQuery(String sql)` method is used for this purpose. It returns a `ResultSet` object.</p>
+                    <code>Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT id, name FROM employees");
+while (rs.next()) {
+    // process results
+}</code>
+                    <p><strong>2. Executing `INSERT`, `UPDATE`, `DELETE` Queries (Updating Data):</strong></p>
+                    <p>The `executeUpdate(String sql)` method is used for these operations. It returns an integer value representing the number of rows affected.</p>
+                    <p><em>Using `PreparedStatement` (Recommended):</em></p>
+                    <code>String sql = "UPDATE employees SET salary = ? WHERE id = ?";
+PreparedStatement pstmt = conn.prepareStatement(sql);
+pstmt.setDouble(1, 75000.0); // Set the first parameter
+pstmt.setInt(2, 101);      // Set the second parameter
+
+int rowsAffected = pstmt.executeUpdate();
+System.out.println(rowsAffected + " row(s) updated.");</code>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UNIT V – Events and GUI Applications -->
+        <div id="unit5" class="unit-content">
+            <h2>UNIT V – Events and GUI Applications</h2>
+            <h3>2 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. What is event handling?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Event handling</strong> is the mechanism for responding to events, which are actions initiated by the user, such as clicking a button, moving the mouse, or typing a key. It involves an event source (the component that generates the event) and an event listener (an object that is notified when the event occurs).</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. What is AWT?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>AWT (Abstract Window Toolkit)</strong> is Java's original platform-dependent API for creating Graphical User Interfaces (GUIs). It provides a set of heavyweight components like buttons and labels that rely on the underlying native operating system's GUI toolkit.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. What is an adapter class?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>An <strong>adapter class</strong> provides an empty implementation of all methods in an event listener interface. They are convenience classes that you can extend if you are only interested in handling a subset of the events in an interface, saving you from having to provide empty implementations for all other methods.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. Define layout manager.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A <strong>layout manager</strong> is an object that controls the positioning and sizing of components within a container. It automatically arranges components, making GUIs more portable. Examples include `FlowLayout`, `BorderLayout`, and `GridLayout`.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. What is a component?</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>A <strong>component</strong> is the base class for all AWT GUI objects. It is an abstract object that can be displayed on the screen and can interact with the user. Examples include buttons, text fields, labels, and checkboxes.</p>
+                </div>
+            </div>
+    
+            <h3>5 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain the delegation event model in Java.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The Delegation Event Model defines a standard mechanism for generating and handling events. It has three key components:</p>
+                    <ol>
+                        <li><strong>Event Source:</strong> The object that generates an event (e.g., a `Button`).</li>
+                        <li><strong>Event Listener:</strong> An object that is notified when an event occurs. It must implement a specific listener interface (e.g., `ActionListener`).</li>
+                        <li><strong>Event Object:</strong> An object that encapsulates information about the event that occurred (e.g., an `ActionEvent`).</li>
+                    </ol>
+                    <p>The process works as follows: The listener registers itself with the source. When the source generates an event, it notifies all registered listeners by calling a specific method on them, passing the event object as an argument.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Describe various AWT components and containers.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>AWT Components (Controls):</strong> These are the basic GUI elements that the user interacts with.</p>
+                    <ul>
+                        <li><strong>`Button`</strong>: A push button that triggers an action.</li>
+                        <li><strong>`Label`</strong>: A display area for a single line of read-only text.</li>
+                        <li><strong>`TextField`</strong>: A single-line text entry area.</li>
+                        <li><strong>`Checkbox`</strong>: A two-state (on/off) selection box.</li>
+                    </ul>
+                    <p><strong>AWT Containers:</strong> These are components that can hold other components.</p>
+                    <ul>
+                        <li><strong>`Frame`</strong>: A top-level window with a title and a border.</li>
+                        <li><strong>`Panel`</strong>: A generic container used to group components inside a `Frame`.</li>
+                        <li><strong>`Dialog`</strong>: A pop-up window that takes input from the user.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Explain event classes and event listener interfaces.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p><strong>Event Classes:</strong> Each type of event is represented by a class. These classes are in the `java.awt.event` package.</p>
+                    <ul>
+                        <li><strong>`ActionEvent`</strong>: Generated by a button click, menu selection, etc.</li>
+                        <li><strong>`MouseEvent`</strong>: Generated by mouse actions like clicks, movement, etc.</li>
+                        <li><strong>`KeyEvent`</strong>: Generated by keyboard key presses.</li>
+                    </ul>
+                    <p><strong>Event Listener Interfaces:</strong> For each event class, there is a corresponding listener interface that defines the methods to be called when the event occurs.</p>
+                    <ul>
+                        <li><strong>`ActionListener`</strong>: For `ActionEvent`. Has one method: `actionPerformed()`.</li>
+                        <li><strong>`MouseListener`</strong>: For `MouseEvent`. Has methods like `mousePressed()`, `mouseClicked()`, etc.</li>
+                        <li><strong>`KeyListener`</strong>: For `KeyEvent`. Has methods like `keyPressed()`, `keyReleased()`.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">4. Write short notes on layout managers.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Layout managers automatically arrange components within a container.</p>
+                    <ul>
+                        <li><strong>`FlowLayout`</strong>: The default for `Panel`. Arranges components in a left-to-right flow.</li>
+                        <li><strong>`BorderLayout`</strong>: The default for `Frame`. Divides the container into five regions: NORTH, SOUTH, EAST, WEST, and CENTER.</li>
+                        <li><strong>`GridLayout`</strong>: Arranges components in a rectangular grid of rows and columns.</li>
+                        <li><strong>`GridBagLayout`</strong>: The most flexible and complex layout manager. It aligns components vertically and horizontally without requiring them to be of the same size.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">5. Describe how to handle button click events.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Handling a button click event involves these steps:</p>
+                    <ol>
+                        <li><strong>Create a Component:</strong> Create an instance of the `Button` class (the Event Source).</li>
+                        <li><strong>Implement the Listener:</strong> Create a class that implements the `ActionListener` interface. This class must provide an implementation for the `actionPerformed(ActionEvent e)` method (the Event Listener).</li>
+                        <li><strong>Register the Listener:</strong> Add the listener object to the button using the `button.addActionListener(listener)` method.</li>
+                    </ol>
+                    <p>When the button is clicked, it creates an `ActionEvent` and calls the `actionPerformed()` method on all its registered listeners.</p>
+                    <code>Button b = new Button("Click Me");
+b.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Button was clicked!");
+    }
+});</code>
+                </div>
+            </div>
+    
+            <h3>10 Marks Questions</h3>
+            <div class="qa-block">
+                <div class="question">1. Explain the AWT hierarchy and its components in detail.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>The AWT class hierarchy is rooted in the `Object` class.</p>
+                    
+                    <ul>
+                        <li><strong>`Component`</strong>: An abstract base class for all GUI elements.</li>
+                        <li><strong>`Container`</strong>: A subclass of `Component` that can hold other components.</li>
+                    </ul>
+                    <p>The hierarchy branches from `Container`:</p>
+                    <ul>
+                        <li><strong>`Window`</strong>: A top-level window.
+                            <ul>
+                                <li><strong>`Frame`</strong>: A fully functional window with a title and border. The main container for applications.</li>
+                                <li><strong>`Dialog`</strong>: A temporary pop-up window.</li>
+                            </ul>
+                        </li>
+                        <li><strong>`Panel`</strong>: A generic, borderless container used to group components.
+                            <ul>
+                                <li><strong>`Applet`</strong>: A subclass of `Panel` designed for web browsers.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p>Direct subclasses of `Component` are the controls like `Button`, `Label`, `TextField`, etc. This hierarchy allows for a structured way to build complex user interfaces.</p>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">2. Discuss event handling mechanism in Java with suitable examples.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Java's event handling mechanism is based on the <strong>Delegation Event Model</strong>, which consists of three parts:</p>
+                    <ol>
+                        <li><strong>Event Source:</strong> A component that generates an event (e.g., `Button`).</li>
+                        <li><strong>Event Listener:</strong> An object that listens for events. It must implement a listener interface (e.g., `ActionListener`).</li>
+                        <li><strong>Event Object:</strong> An object created by the source to encapsulate event details (e.g., `ActionEvent`).</li>
+                    </ol>
+                    <p><strong>Mechanism:</strong></p>
+                    <ol>
+                        <li>The listener object registers itself with a source using an `add<Type>Listener()` method.</li>
+                        <li>When the user interacts with the source, the source creates an event object.</li>
+                        <li>The source then calls the appropriate method on all its registered listeners, passing the event object.</li>
+                    </ol>
+                    <p><strong>Example (Handling a Mouse Click):</strong></p>
+                    <code>import java.awt.*;
+import java.awt.event.*;
+
+public class MouseEventExample extends Frame implements MouseListener {
+    Label l;
+    MouseEventExample() {
+        l = new Label();
+        l.setBounds(20, 50, 100, 20);
+        add(l);
+        addMouseListener(this); // Registering listener
+        setSize(300,300); setLayout(null); setVisible(true);
+    }
+    
+    public void mouseClicked(MouseEvent e) { l.setText("Mouse Clicked"); }
+    // Other MouseListener methods must also be implemented...
+    public void mousePressed(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+}</code>
+                </div>
+            </div>
+            <div class="qa-block">
+                <div class="question">3. Explain the creation of a simple GUI using AWT controls.</div>
+                <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                <div class="answer">
+                    <p>Creating a simple GUI involves these steps:</p>
+                    <ol>
+                        <li><strong>Choose a Container:</strong> Start with a top-level container, typically a `Frame`.</li>
+                        <li><strong>Set Layout:</strong> Choose and set a layout manager (e.g., `frame.setLayout(new FlowLayout());`).</li>
+                        <li><strong>Create Components:</strong> Create instances of AWT controls like `Label`, `TextField`, and `Button`.</li>
+                        <li><strong>Add Components to Container:</strong> Use the `add()` method to place the components into the container.</li>
+                        <li><strong>Handle Events:</strong> Implement and register event listeners for interactive components.</li>
+                        <li><strong>Set Frame Properties:</strong> Set the size, visibility, and closing operation of the frame.</li>
+                    </ol>
+                    <p><strong>Example: A Simple Login Form</strong></p>
+                    <code>import java.awt.*;
+import java.awt.event.*;
+
+public class SimpleGui extends Frame {
+    SimpleGui() {
+        setLayout(new FlowLayout());
+
+        add(new Label("Username:"));
+        add(new TextField(20));
+        add(new Label("Password:"));
+        TextField passText = new TextField(20);
+        passText.setEchoChar('*');
+        add(passText);
+        add(new Button("Login"));
+        
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) { System.exit(0); }
+        });
+        
+        setTitle("Login Form");
+        setSize(300, 150);
+        setVisible(true);
+    }
+}</code>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Function to set theme
+        const setTheme = (isDark) => {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                themeToggle.checked = true;
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                themeToggle.checked = false;
+                localStorage.setItem('theme', 'light');
+            }
+        };
+
+        // Event listener for toggle switch
+        themeToggle.addEventListener('change', () => {
+            setTheme(themeToggle.checked);
+        });
+
+        // Check for saved theme in localStorage or user's system preference
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme) {
+            setTheme(savedTheme === 'dark');
+        } else {
+            setTheme(prefersDark);
+        }
+
+        // Tab navigation logic
+        function showUnit(unitId, element) {
+            document.querySelectorAll('.unit-content').forEach(content => content.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(unitId).style.display = 'block';
+            element.classList.add('active');
+        }
+
+        // Answer toggle logic
+        function toggleAnswer(button) {
+            const answerDiv = button.parentElement.querySelector('.answer');
+            const isVisible = answerDiv.style.display === "block";
+            answerDiv.style.display = isVisible ? "none" : "block";
+            button.textContent = isVisible ? "Show Answer" : "Hide Answer";
+        }
+    </script>
+</body>
+</html>
